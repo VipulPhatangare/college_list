@@ -1,0 +1,126 @@
+BRANCH__CODE,BRANCH__NAME,Flag
+19110,Civil Engineering,N
+24210,Computer Science and Engineering,T
+24610,Information Technology,T
+29310,Electrical Engineering,E
+37210,Electronics and Telecommunication Engg,E
+46610,Instrumentation Engineering,N
+61210,Mechanical Engineering,N
+50310,Food Technology,N
+51710,Oil and Paints Technology,N
+52410,Paper and Pulp Technology,N
+52710,Petro Chemical Engineering,N
+24510,Computer Engineering,T
+35610,Electrical Engg[Electronics and Power],E
+26310,Artificial Intelligence (AI) and Data Science,T
+26510,Industrial IoT,N
+99510,Artificial Intelligence and Data Science,T
+50710,Chemical Engineering,N
+89310,Textile Engineering / Technology,N
+91210,Computer Science and Engineering(Data Science),T
+60610,Production Engineering,N
+89610,Textile Technology,N
+81610,Pharmaceutical and Fine Chemical Technology,N
+90410,Chemical Engineering,N
+84410,Electronics and Computer Engineering,E
+91110,Computer Science and Engineering(Artificial Intelligence and Machine Learning),T
+92910,VLSI,E
+93010,Logistics,N
+93210,5G,E
+1110,Agricultural Engineering,N
+25710,Computer Science and Design,T
+50110,Plastic and Polymer Engineering,N
+61510,Mechanical & Automation Engineering,N
+29810,Electrical Engg [Electrical and Power],E
+37610,Electronics Engineering,E
+37810,Electronics Engineering ( VLSI Design and Technology),E
+92110,Artificial Intelligence and Machine Learning,T
+29710,Electrical and Electronics Engineering,E
+90010,Electronics and Computer Science,E
+91410,Safety and Fire Engineering,N
+92810,Electronics and Communication(Advanced Communication Technology),E
+62610,Production Engineering[Sandwich],N
+19113K,Civil Engineering    __K,N
+24513K,Computer Engineering    __K,T
+24613K,Information Technology    __K,T
+29313K,Electrical Engineering    __K,E
+37213K,Electronics and Telecommunication Engg    __K,E
+37290L,Electronics and Telecommunication Engg    __L,E
+37293L,Electronics and Telecommunication Engg    __L,E
+37813K,Electronics Engineering ( VLSI Design and Technology)    __K,E
+50713K,Chemical Engineering    __K,N
+52713K,Petro Chemical Engineering    __K,N
+61213K,Mechanical Engineering    __K,N
+24550F,Computer Engineering    __F,T
+24650F,Information Technology    __F,T
+25450F,Computer Science and Technology    __F,T
+37050F,Electronics and Communication Engineering    __F,E
+91750F,Data Science    __F,T
+99750F,Artificial Intelligence    __F,T
+51110,Dyestuff Technology,E
+51210,"Oil,Oleochemicals and Surfactants Technology",N
+51310,Pharmaceuticals Chemistry and Technology,N
+51410,Fibres and Textile Processing Technology,N
+51910,Polymer Engineering and Technology,N
+53410,Food Engineering and Technology,N
+72910,Surface Coating Technology,N
+50410,Food Technology And Management,N
+62410,Mechatronics Engineering,N
+91810,Civil and infrastructure Engineering,N
+46110,Bio Medical Engineering,N
+92010,Computer Science and Engineering (Internet of Things and Cyber Security Including Block Chain,T
+91710,Data Science,T
+25210,Cyber Security,T
+60210,Automobile Engineering,N
+25310,Internet of Things (IoT),T
+25910,Mechanical and Mechatronics Engineering (Additive Manufacturing),N
+91010,Computer Science and Engineering(Cyber Security),T
+91610,Automation and Robotics,N
+56610,Computer Science,T
+92610,Electrical and Computer Engineering,E
+93410,Civil Engineering and Planning,N
+93510,Electronics and Biomedical Engineering,E
+92410,Data Engineering,T
+51010,Plastic and Polymer Technology,N
+52810,Petro Chemical Technology,N
+52910,Oil Technology,N
+25110,Computer Technology,T
+37010,Electronics and Communication Engineering,E
+26010,Computer Science and Engineering (Cyber Security),T
+26710,Computer Science and Engineering (IoT),T
+91310,Computer Science and Engineering (Artificial Intelligence),T
+99710,Artificial Intelligence,T
+210,Aeronautical Engineering,N
+8210,Bio Technology,N
+26610,Robotics and Artificial Intelligence,T
+70110,Mining Engineering,N
+26210,Computer Science and Business Systems,T
+37250F,Electronics and Telecommunication Engg    __F,E
+61250F,Mechanical Engineering    __F,N
+50810,Plastic Technology,N
+51810,Oil Fats and Waxes Technology,N
+52310,Paints Technology,N
+46410,Instrumentation and Control Engineering,N
+91910,Robotics and Automation,N
+91510,Structural Engineering,N
+92210,Civil and Environmental Engineering,N
+62710,Manufacturing Science and Engineering,N
+69410,Metallurgy and Material Technology,N
+25410,Computer Science and Technology,T
+92710,Computer Engineering (Software Engineering),T
+24590L,Computer Engineering    __L,T
+56810,Computer Science and Information Technology,T
+57010,Fashion Technology,N
+88610,Man Made Textile Technology,N
+89010,Textile Chemistry,N
+89510,Textile Plant Engineering,N
+92510,Computer Science and Engineering (Artificial Intelligence and Data Science),T
+21910,Robotics and Automation,N
+84310,Printing Technology,N
+46450F,Instrumentation and Control Engineering    __F,N
+62510,Mechanical Engineering[Sandwich],N
+93310,Electronics and Communication (Advanced Communication Technology),E
+24250F,Computer Science and Engineering    __F,T
+29350F,Electrical Engineering    __F,F
+84450F,Electronics and Computer Engineering    __F,E
+92550F,Computer Science and Engineering (Artificial Intelligence and Data Science)    __F,T
