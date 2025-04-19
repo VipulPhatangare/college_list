@@ -147,8 +147,107 @@ const new_data_of_student = {
     specialReservation: ''
 };
 
+// async function getColleges(mainCaste, casteColumn, minRank, maxRank, formData) {
+//     // Determine additional columns based on special reservation
+//     let specialReservationColumn = '';
+//     if (formData.specialReservation === 'PWD') {
+//         specialReservationColumn = 'PWDOPEN';
+//         new_data_of_student.specialReservation = 'PWD';
+//     } else if (formData.specialReservation === 'Defence') {
+//         specialReservationColumn = 'DEFOPENS';
+//         new_data_of_student.specialReservation = 'DEF';
+//     }
+
+//     // Base query for OPEN caste and Male gender
+//     let query = supabase
+//         .from('all_cutoff_cet')
+//         .select(`
+//             CHOICE_CODE, 
+//             COLLEGE_CODE,
+//             BRANCH_CODE,
+//             GOPEN,
+//             TFWS,
+//             ${specialReservationColumn},
+//             all_collage_code:COLLEGE_CODE(COLLAGE_NAME),
+//             branch_code:BRANCH_CODE(BRANCH__NAME, Flag)
+//         `)
+//         .gte('GOPEN', minRank)
+//         .lte('GOPEN', maxRank)
+//         .neq('GOPEN', 0)
+//         .order('GOPEN', { ascending: true });
+
+//     // Modified query for OPEN caste and Female gender
+//     if (formData.caste === 'OPEN' && formData.gender === 'Female') {
+//         query = supabase
+//             .from('all_cutoff_cet')
+//             .select(`
+//                 CHOICE_CODE, 
+//                 COLLEGE_CODE,
+//                 BRANCH_CODE,
+//                 GOPEN,
+//                 LOPEN,
+//                 TFWS,
+//                 ${specialReservationColumn},
+//                 all_collage_code:COLLEGE_CODE(COLLAGE_NAME),
+//                 branch_code:BRANCH_CODE(BRANCH__NAME, Flag)
+//             `)
+//             .gte('LOPEN', minRank)
+//             .lte('LOPEN', maxRank)
+//             .neq('LOPEN', 0)
+//             .order('LOPEN', { ascending: true });
+//     }
+
+//     // Modified query for non-OPEN castes
+//     if (formData.caste !== 'OPEN') {
+//         const columnToFilter = formData.gender === 'Female' ? 'L' + formData.caste : 'G' + formData.caste;
+        
+//         query = supabase
+//             .from('all_cutoff_cet')
+//             .select(`
+//                 CHOICE_CODE, 
+//                 COLLEGE_CODE,
+//                 BRANCH_CODE,
+//                 GOPEN,
+//                 ${mainCaste}, 
+//                 ${casteColumn},
+//                 TFWS,
+//                 ${specialReservationColumn},
+//                 all_collage_code:COLLEGE_CODE(COLLAGE_NAME),
+//                 branch_code:BRANCH_CODE(BRANCH__NAME, Flag)
+//             `)
+//             .gte(casteColumn, minRank)
+//             .lte(casteColumn, maxRank)
+//             .neq(formData.gender === 'Female' ? 'LOPEN' : 'GOPEN', 0)
+//             .order(formData.gender === 'Female' ? 'LOPEN' : 'GOPEN', { ascending: true });
+//     }
+
+//     try {
+//         const { data, error } = await query;
+//         if (error) throw error;
+        
+//         // Format the data to match the original structure
+//         return data.map(row => ({
+//             CHOICE_CODE: row.CHOICE_CODE,
+//             COLLAGE_NAME: row.all_collage_code?.COLLAGE_NAME,
+//             BRANCH_CODE: row.BRANCH_CODE,
+//             BRANCH__NAME: row.branch_code?.BRANCH__NAME,
+//             COLLEGE_CODE: row.COLLEGE_CODE,
+//             Flag: row.branch_code?.Flag,
+//             TFWS: row.TFWS,
+//             GOPEN: row.GOPEN,
+//             [mainCaste]: row[mainCaste],
+//             [casteColumn]: row[casteColumn],
+//             ...(formData.specialReservation === 'PWD' && { PWD: row.PWDOPEN }),
+//             ...(formData.specialReservation === 'Defence' && { DEF: row.DEFOPENS }),
+//             ...(formData.gender === 'Female' && { LOPEN: row.LOPEN })
+//         }));
+//     } catch (error) {
+//         console.error('Error fetching colleges:', error);
+//         throw error;
+//     }
+// }
+
 async function getColleges(mainCaste, casteColumn, minRank, maxRank, formData) {
-    // Determine additional columns based on special reservation
     let specialReservationColumn = '';
     if (formData.specialReservation === 'PWD') {
         specialReservationColumn = 'PWDOPEN';
@@ -158,63 +257,67 @@ async function getColleges(mainCaste, casteColumn, minRank, maxRank, formData) {
         new_data_of_student.specialReservation = 'DEF';
     }
 
-    // Base query for OPEN caste and Male gender
+    // 🧠 Build the select string dynamically to avoid extra commas
+    const baseColumns = [
+        'CHOICE_CODE',
+        'COLLEGE_CODE',
+        'BRANCH_CODE',
+        'GOPEN',
+        'TFWS',
+        specialReservationColumn, // may be empty
+        'all_collage_code:COLLEGE_CODE(COLLAGE_NAME)',
+        'branch_code:BRANCH_CODE(BRANCH__NAME,Flag)'
+    ].filter(Boolean).join(', '); // removes any empty strings
+
     let query = supabase
         .from('all_cutoff_cet')
-        .select(`
-            CHOICE_CODE, 
-            COLLEGE_CODE,
-            BRANCH_CODE,
-            GOPEN,
-            TFWS,
-            ${specialReservationColumn},
-            all_collage_code:COLLEGE_CODE(COLLAGE_NAME),
-            branch_code:BRANCH_CODE(BRANCH__NAME, Flag)
-        `)
+        .select(baseColumns)
         .gte('GOPEN', minRank)
         .lte('GOPEN', maxRank)
         .neq('GOPEN', 0)
         .order('GOPEN', { ascending: true });
 
-    // Modified query for OPEN caste and Female gender
     if (formData.caste === 'OPEN' && formData.gender === 'Female') {
+        const columns = [
+            'CHOICE_CODE',
+            'COLLEGE_CODE',
+            'BRANCH_CODE',
+            'GOPEN',
+            'LOPEN',
+            'TFWS',
+            specialReservationColumn,
+            'all_collage_code:COLLEGE_CODE(COLLAGE_NAME)',
+            'branch_code:BRANCH_CODE(BRANCH__NAME,Flag)'
+        ].filter(Boolean).join(', ');
+
         query = supabase
             .from('all_cutoff_cet')
-            .select(`
-                CHOICE_CODE, 
-                COLLEGE_CODE,
-                BRANCH_CODE,
-                GOPEN,
-                LOPEN,
-                TFWS,
-                ${specialReservationColumn},
-                all_collage_code:COLLEGE_CODE(COLLAGE_NAME),
-                branch_code:BRANCH_CODE(BRANCH__NAME, Flag)
-            `)
+            .select(columns)
             .gte('LOPEN', minRank)
             .lte('LOPEN', maxRank)
             .neq('LOPEN', 0)
             .order('LOPEN', { ascending: true });
     }
 
-    // Modified query for non-OPEN castes
     if (formData.caste !== 'OPEN') {
+        const columns = [
+            'CHOICE_CODE',
+            'COLLEGE_CODE',
+            'BRANCH_CODE',
+            'GOPEN',
+            mainCaste,
+            casteColumn,
+            'TFWS',
+            specialReservationColumn,
+            'all_collage_code:COLLEGE_CODE(COLLAGE_NAME)',
+            'branch_code:BRANCH_CODE(BRANCH__NAME,Flag)'
+        ].filter(Boolean).join(', ');
+
         const columnToFilter = formData.gender === 'Female' ? 'L' + formData.caste : 'G' + formData.caste;
-        
+
         query = supabase
             .from('all_cutoff_cet')
-            .select(`
-                CHOICE_CODE, 
-                COLLEGE_CODE,
-                BRANCH_CODE,
-                GOPEN,
-                ${mainCaste}, 
-                ${casteColumn},
-                TFWS,
-                ${specialReservationColumn},
-                all_collage_code:COLLEGE_CODE(COLLAGE_NAME),
-                branch_code:BRANCH_CODE(BRANCH__NAME, Flag)
-            `)
+            .select(columns)
             .gte(casteColumn, minRank)
             .lte(casteColumn, maxRank)
             .neq(formData.gender === 'Female' ? 'LOPEN' : 'GOPEN', 0)
@@ -224,8 +327,7 @@ async function getColleges(mainCaste, casteColumn, minRank, maxRank, formData) {
     try {
         const { data, error } = await query;
         if (error) throw error;
-        
-        // Format the data to match the original structure
+
         return data.map(row => ({
             CHOICE_CODE: row.CHOICE_CODE,
             COLLAGE_NAME: row.all_collage_code?.COLLAGE_NAME,
