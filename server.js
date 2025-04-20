@@ -139,7 +139,7 @@ function getCasteColumns(caste, gender) {
 
     let main_caste = `${prefix}OPEN`;
     let caste_Column = caste;
-    if(caste == 'EWS'){
+    if(caste !== 'EWS'){
         caste_Column = `${prefix}${caste}`;
         new_data_of_student.casteColumn = `${prefix}${caste}`;
     }
