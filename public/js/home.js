@@ -119,15 +119,24 @@ function displayColleges(colleges,formData,newData) {
     }
 
     colleges.forEach(college => {
-        const card = createCollegeCard(college,formData,newData);
-        collegeCardsContainer.appendChild(card);
+
+        if(formData.tfws){
+            const card = createCollegeCard(college,newData,true);
+            collegeCardsContainer.appendChild(card);
+        }
+
+        const card_1 = createCollegeCard(college,newData,false);
+        collegeCardsContainer.appendChild(card_1);
+        
     });
     
     resultsContainer.style.display = 'block';
     updateSelectedCount(colleges.length);
 }
 
-function createCollegeCard(college,formData,newData) {
+
+
+function createCollegeCard(college,newData,tfws) {
     const card = document.createElement('div');
     card.className = 'college-card selected';
     card.dataset.code = college.CHOICE_CODE;
@@ -139,9 +148,17 @@ function createCollegeCard(college,formData,newData) {
     const categoryCutoff_3 = college[newData.specialReservation] || '0' ;
     const openCutoff = college.GOPEN || 'N/A';
     
+    let clg_code = college.CHOICE_CODE;
+
+    // console.log(categoryCutoff_1, ' ', categoryCutoff_2, ' ', categoryCutoff_3);
+
+    if(tfws){
+        clg_code = `${clg_code}T`;
+    }
+
     let card_content = `
         <div class="college-card-header">
-            <div class="college-code">${college.CHOICE_CODE}</div>
+            <div class="college-code">${clg_code}</div>
             
             <input type="checkbox" checked class="card-checkbox">
         </div>
@@ -153,6 +170,7 @@ function createCollegeCard(college,formData,newData) {
                 <div>${openCutoff}</div>
             </div>
         `;
+
     if(newData.mainCaste != 'GOPEN'){
         card_content = card_content + `
             <div class="college-detail">
@@ -172,7 +190,7 @@ function createCollegeCard(college,formData,newData) {
     }
 
     
-
+    // console.log(newData.specialReservation);
     if(newData.specialReservation != ''){
         card_content = card_content + `
             <div class="college-detail">
@@ -181,6 +199,16 @@ function createCollegeCard(college,formData,newData) {
             </div>
         `
     }
+
+    if(tfws){
+        card_content = card_content + `
+            <div class="college-detail">
+                <div class="college-detail-label">TFWS</div>
+                <div>${college.TFWS}</div>
+            </div>
+        `
+    }
+
     card.innerHTML = card_content + `
         </div>
     `;
@@ -296,49 +324,8 @@ function removeBranch(branchValue) {
     
     updateSelectedBranchesDisplay();
     
-    // Ensure dropdown is hidden if custom branch button was clicked
-    // if (!customBranchBtn.classList.contains('hidden')) {
-    //     branchSelect.classList.add('hidden');
-    // }
 }
 
-// Update your generateCollegeList function to filter by selected branches
-// function generateCollegeList(formData) {
-//     let filteredColleges = collegeData.filter(college => {
-//         // Existing region filter
-//         if (formData.region !== "All" && college.region !== formData.region) {
-//             return false;
-//         }
-        
-//         // Filter by selected branches if any
-//         if (selectedBranches.length > 0) {
-//             const collegeBranchCode = college.branch.toUpperCase().replace(/\s+/g, '_');
-//             if (!selectedBranches.includes(collegeBranchCode)) {
-//                 return false;
-//             }
-//         }
-        
-//         // Existing branch category filter
-//         if (formData.branchCategory !== "All") {
-//             if (formData.branchCategory === "Tech" && !college.branch.includes("Engineering")) {
-//                 return false;
-//             }
-//             if (formData.branchCategory === "Non-Tech" && college.branch.includes("Engineering")) {
-//                 return false;
-//             }
-//             if (formData.branchCategory === "Electrical" && 
-//                 !college.branch.includes("Electrical") && 
-//                 !college.branch.includes("Electronics")) {
-//                 return false;
-//             }
-//         }
-        
-//         return true;
-//     });
-
-//     filteredColleges.sort((a, b) => b.openCutoff - a.openCutoff);
-//     displayColleges(filteredColleges);
-// }
 
 document.addEventListener("DOMContentLoaded", fetchBranches());
 

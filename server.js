@@ -38,7 +38,7 @@ function customRound(value) {
 app.post('/College_list', async (req, res) => {
     try {
         const formData = req.body;
-        console.log('Received form data:', formData);
+        // console.log('Received form data:', formData);
 
         // 1. Get rank from percentile
         const rank = await getRankFromPercentile(formData.percentile);
@@ -47,7 +47,7 @@ app.post('/College_list', async (req, res) => {
         }
 
         const selected_branches_code = await getSelectedBranchCode(formData.selected_branches);
-        console.log(selected_branches_code);
+        // console.log(selected_branches_code);
         
         // 2. Calculate rank range
         const { minRank, maxRank, topCollegeGive } = calculateRankRange(rank);
@@ -60,7 +60,7 @@ app.post('/College_list', async (req, res) => {
 
         // 5. Filter and format results
         const filteredColleges = filterAndFormatColleges(colleges, formData, selected_branches_code);
-        console.log(filteredColleges); 
+        // console.log(filteredColleges); 
 
         res.json({
             new_data_of_student,
@@ -134,10 +134,19 @@ function calculateRankRange(rank) {
 function getCasteColumns(caste, gender) {
     const prefix = gender === 'Female' ? 'L' : 'G';
     new_data_of_student.mainCaste = `${prefix}OPEN`;
-    new_data_of_student.casteColumn = `${prefix}${caste}`;
+
+    new_data_of_student.casteColumn = caste;
+
+    let main_caste = `${prefix}OPEN`;
+    let caste_Column = caste;
+    if(caste !== 'EWS'){
+        caste_Column = `${prefix}${caste}`;
+        new_data_of_student.casteColumn = `${prefix}${caste}`;
+    }
+
     return {
-        mainCaste: `${prefix}OPEN`,
-        casteColumn: `${prefix}${caste}`
+        mainCaste: main_caste,
+        casteColumn: caste
     };
 }
 
@@ -147,108 +156,11 @@ const new_data_of_student = {
     specialReservation: ''
 };
 
-// async function getColleges(mainCaste, casteColumn, minRank, maxRank, formData) {
-//     // Determine additional columns based on special reservation
-//     let specialReservationColumn = '';
-//     if (formData.specialReservation === 'PWD') {
-//         specialReservationColumn = 'PWDOPEN';
-//         new_data_of_student.specialReservation = 'PWD';
-//     } else if (formData.specialReservation === 'Defence') {
-//         specialReservationColumn = 'DEFOPENS';
-//         new_data_of_student.specialReservation = 'DEF';
-//     }
 
-//     // Base query for OPEN caste and Male gender
-//     let query = supabase
-//         .from('all_cutoff_cet')
-//         .select(`
-//             CHOICE_CODE, 
-//             COLLEGE_CODE,
-//             BRANCH_CODE,
-//             GOPEN,
-//             TFWS,
-//             ${specialReservationColumn},
-//             all_collage_code:COLLEGE_CODE(COLLAGE_NAME),
-//             branch_code:BRANCH_CODE(BRANCH__NAME, Flag)
-//         `)
-//         .gte('GOPEN', minRank)
-//         .lte('GOPEN', maxRank)
-//         .neq('GOPEN', 0)
-//         .order('GOPEN', { ascending: true });
-
-//     // Modified query for OPEN caste and Female gender
-//     if (formData.caste === 'OPEN' && formData.gender === 'Female') {
-//         query = supabase
-//             .from('all_cutoff_cet')
-//             .select(`
-//                 CHOICE_CODE, 
-//                 COLLEGE_CODE,
-//                 BRANCH_CODE,
-//                 GOPEN,
-//                 LOPEN,
-//                 TFWS,
-//                 ${specialReservationColumn},
-//                 all_collage_code:COLLEGE_CODE(COLLAGE_NAME),
-//                 branch_code:BRANCH_CODE(BRANCH__NAME, Flag)
-//             `)
-//             .gte('LOPEN', minRank)
-//             .lte('LOPEN', maxRank)
-//             .neq('LOPEN', 0)
-//             .order('LOPEN', { ascending: true });
-//     }
-
-//     // Modified query for non-OPEN castes
-//     if (formData.caste !== 'OPEN') {
-//         const columnToFilter = formData.gender === 'Female' ? 'L' + formData.caste : 'G' + formData.caste;
-        
-//         query = supabase
-//             .from('all_cutoff_cet')
-//             .select(`
-//                 CHOICE_CODE, 
-//                 COLLEGE_CODE,
-//                 BRANCH_CODE,
-//                 GOPEN,
-//                 ${mainCaste}, 
-//                 ${casteColumn},
-//                 TFWS,
-//                 ${specialReservationColumn},
-//                 all_collage_code:COLLEGE_CODE(COLLAGE_NAME),
-//                 branch_code:BRANCH_CODE(BRANCH__NAME, Flag)
-//             `)
-//             .gte(casteColumn, minRank)
-//             .lte(casteColumn, maxRank)
-//             .neq(formData.gender === 'Female' ? 'LOPEN' : 'GOPEN', 0)
-//             .order(formData.gender === 'Female' ? 'LOPEN' : 'GOPEN', { ascending: true });
-//     }
-
-//     try {
-//         const { data, error } = await query;
-//         if (error) throw error;
-        
-//         // Format the data to match the original structure
-//         return data.map(row => ({
-//             CHOICE_CODE: row.CHOICE_CODE,
-//             COLLAGE_NAME: row.all_collage_code?.COLLAGE_NAME,
-//             BRANCH_CODE: row.BRANCH_CODE,
-//             BRANCH__NAME: row.branch_code?.BRANCH__NAME,
-//             COLLEGE_CODE: row.COLLEGE_CODE,
-//             Flag: row.branch_code?.Flag,
-//             TFWS: row.TFWS,
-//             GOPEN: row.GOPEN,
-//             [mainCaste]: row[mainCaste],
-//             [casteColumn]: row[casteColumn],
-//             ...(formData.specialReservation === 'PWD' && { PWD: row.PWDOPEN }),
-//             ...(formData.specialReservation === 'Defence' && { DEF: row.DEFOPENS }),
-//             ...(formData.gender === 'Female' && { LOPEN: row.LOPEN })
-//         }));
-//     } catch (error) {
-//         console.error('Error fetching colleges:', error);
-//         throw error;
-//     }
-// }
 
 async function getColleges(mainCaste, casteColumn, minRank, maxRank, formData) {
     let specialReservationColumn = '';
+    new_data_of_student.specialReservation = '';
     if (formData.specialReservation === 'PWD') {
         specialReservationColumn = 'PWDOPEN';
         new_data_of_student.specialReservation = 'PWD';
